@@ -4,7 +4,7 @@
     {
         static public void DoStuff(int value)
         {
-            value += 40;
+            value += 80;
             Console.WriteLine(value);
 
             // to see this place in the dump debuggin, open the dump in IDE
