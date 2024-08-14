@@ -2,7 +2,7 @@
 // to dump, install dotnet dump tool
 
 using ConsoleApp1;
-using ServerPerformance;
+using App.ServerPerformance;
 
 Console.WriteLine("Hello, World!");
 
