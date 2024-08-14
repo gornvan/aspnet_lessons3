@@ -2,7 +2,8 @@
 // to dump, install dotnet dump tool
 
 using ConsoleApp1;
-using App.ServerPerformance;
+using App.PerformanceStatsProvider;
+using App.PerformanceStatsProvider.Windows;
 
 Console.WriteLine("Hello, World!");
 
@@ -15,9 +16,24 @@ Test.DoStuff(b);
 
 Console.WriteLine(b);
 
+
+IPerformanceCounter cpuCounter;
+IPerformanceCounter memoCounter;
+if (OperatingSystem.IsWindows())
+{
+    cpuCounter = new CpuUtilizationPercentageCounter_Windows();
+    memoCounter = new OccupiedMemoryPercentageCounter_Windows();
+}
+else
+{
+    throw new NotSupportedException("Only for Windows yet!");
+}
+
+var performanceProvider = new PerformanceStatsProvider(cpuCounter, memoCounter);
+
 while (true)
 {
-    var stats = PerformanceStatsProvider.GetPerformanceStats();
+    var stats = performanceProvider.GetPerformanceStats();
     Console.WriteLine("Total CPU Utilization: {0}%", stats.TotalCpuUtilizationPercentage);
     Console.WriteLine("Occupied Memory: {0}%", stats.OccupiedMemoryPercentage);
     Console.WriteLine("Total Running Processes: {0}", stats.TotalRunningProcessesCount);
