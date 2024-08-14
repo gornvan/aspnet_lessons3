@@ -8,6 +8,7 @@
             Console.WriteLine(value);
 
             // to see this place in the dump debuggin, open the dump in IDE
+            Console.Write("Waiting for ReadLine...");
             Console.ReadLine();
         }
     }
