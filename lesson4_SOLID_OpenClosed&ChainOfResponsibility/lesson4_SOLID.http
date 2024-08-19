@@ -1,0 +1,6 @@
+@lesson4_SOLID_HostAddress = http://localhost:5251
+
+GET {{lesson4_SOLID_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
