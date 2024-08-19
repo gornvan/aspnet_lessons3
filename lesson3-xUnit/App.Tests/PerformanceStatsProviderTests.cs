@@ -1,4 +1,4 @@
-using App.ServerPerformance;
+using App.PerformanceStatsProvider;
 using System.Text.Json;
 using Xunit.Abstractions;
 
@@ -8,10 +8,62 @@ public class PerformanceStatsProviderTests
     private static int counter = 0;
     private readonly ITestOutputHelper output;
 
+    private Mock<IPerformanceCounter> _cpuPerformanceCounterMock;
+    private Mock<IPerformanceCounter> _memoPerformanceCounterMock;
+
+    private PerformanceStatsProvider.PerformanceStatsProvider _performanceStatsProvider;
+
     public PerformanceStatsProviderTests(ITestOutputHelper output)
     {
+        // demonstration of the constructor being called for each Test - the counter will grow
         output.WriteLine($@"{counter++}");
         this.output = output;
+
+        _cpuPerformanceCounterMock = new Mock<IPerformanceCounter>();
+        _cpuPerformanceCounterMock
+            .Setup(c => c.NextValue())
+            .Returns(() => 42f);
+        var cpuPerformanceCounter = _cpuPerformanceCounterMock.Object;
+
+        _memoPerformanceCounterMock = new Mock<IPerformanceCounter>();
+        _memoPerformanceCounterMock
+            .Setup(c => c.NextValue())
+            .Returns(() => 78f);
+        var memoPerformanceCounter = _memoPerformanceCounterMock.Object;
+
+        _performanceStatsProvider =
+            new PerformanceStatsProvider.PerformanceStatsProvider(
+                cpuPerformanceCounter,
+                memoPerformanceCounter);
+    }
+
+    [Fact]
+    public void ProviderReliesOnMemoryCounterToReturnOccupiedMemoryMetric()
+    {
+        // arrange
+        // provider already initialized in the constructor
+
+        // act
+        var stats = _performanceStatsProvider.GetPerformanceStats();
+        output.WriteLine(JsonSerializer.Serialize(stats));
+
+        // assert
+        _memoPerformanceCounterMock.Verify(c => c.NextValue(), Times.Once());
+    }
+
+
+    [Fact]
+    public void ProviderReliesOnCpuCounterToReturnOccupiedCpuMetric()
+    {
+        // arrange
+        // provider already initialized in the constructor
+
+        // act
+        var stats = _performanceStatsProvider.GetPerformanceStats();
+        output.WriteLine(JsonSerializer.Serialize(stats));
+
+        // assert
+        _cpuPerformanceCounterMock.Verify(c => c.NextValue(), Times.Once());
     }
 
     [Fact]
@@ -21,7 +73,7 @@ public class PerformanceStatsProviderTests
         // nothing to arrange
 
         // act
-        var stats = PerformanceStatsProvider.GetPerformanceStats();
+        var stats = _performanceStatsProvider.GetPerformanceStats();
         output.WriteLine(JsonSerializer.Serialize(stats));
 
         // assert
@@ -45,7 +97,7 @@ public class PerformanceStatsProviderTests
         // nothing to arrange
 
         // act
-        var stats = PerformanceStatsProvider.GetPerformanceStats();
+        var stats = _performanceStatsProvider.GetPerformanceStats();
         output.WriteLine(JsonSerializer.Serialize(stats));
 
         Assert.True(
