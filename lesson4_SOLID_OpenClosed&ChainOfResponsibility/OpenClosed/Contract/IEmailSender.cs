@@ -1,11 +1,10 @@
 ﻿using System.Net.Mail;
-using lesson4_SOLID.OpenClosed.Base;
 
 namespace lesson4_SOLID.OpenClosed.Contract
 {
-    public interface IEmailSender<EmailType> where EmailType : EmailContentsBase
+    public interface IEmailSender<EmailType> where EmailType : emailContentsBase
     {
-        void SendEmail(EmailType emailContents);
+        void sendEmail(EmailType emailContents);
         void SendEmailProcessingChain(EmailType emailContents, MailMessage message, SmtpClient client);
     }
 }

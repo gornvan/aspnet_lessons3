@@ -1,6 +1,6 @@
 ﻿namespace lesson4_SOLID.OpenClosed.Contract
 {
-    public class EmailContentsBase
+    public class emailContentsBase
     {
         public string AddressFrom;
         public string AddressTo;

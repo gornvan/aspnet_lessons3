@@ -5,10 +5,10 @@ namespace lesson4_SOLID.OpenClosed.WithAttachment
 {
     public class EmailSenderWithAttachment : IEmailSender<EmailWithAttachment>
     {
-        private IEmailSender<EmailContentsBase> _basicSender;
+        private IEmailSender<emailContentsBase> _basicSender;
         private string _serverHost;
 
-        public EmailSenderWithAttachment(IEmailSender<EmailContentsBase> basicEmailSender, string serverHost)
+        public EmailSenderWithAttachment(IEmailSender<emailContentsBase> basicEmailSender, string serverHost)
         {
             _basicSender = basicEmailSender;
             _serverHost = serverHost;

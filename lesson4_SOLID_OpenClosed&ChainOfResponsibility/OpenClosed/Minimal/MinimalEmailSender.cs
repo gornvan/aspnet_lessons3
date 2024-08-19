@@ -1,12 +1,12 @@
-﻿using System.Net.Mail;
+﻿using lesson4_SOLID.OpenClosed.Contract;
 using System.Net;
-using System.Net.Http;
+using System.Net.Mail;
 
 namespace lesson4_SOLID.OpenClosed
 {
-    public class MinimalEmailSender : IEmailSender<EmailContentsBase>
+    public class MinimalEmailSender : IEmailSender<emailContentsBase>
     {
-        public void SendEmailProcessingChain(EmailContentsBase emailContents, MailMessage message, SmtpClient smtpClient)
+        public void SendEmailProcessingChain(emailContentsBase emailContents, MailMessage message, SmtpClient smtpClient)
         {
             message.From = new MailAddress(emailContents.AddressFrom);
             message.To.Add(new MailAddress(emailContents.AddressTo));
@@ -30,7 +30,7 @@ namespace lesson4_SOLID.OpenClosed
             }
         }
 
-        public void SendEmail(EmailContentsBase emailContents)
+        public void SendEmail(emailContentsBase emailContents)
         {
             using (var message = new MailMessage())
             {

@@ -2,7 +2,7 @@
 
 namespace lesson4_SOLID.OpenClosed.WithAttachment
 {
-    public class EmailWithAttachment : EmailContentsBase
+    public class EmailWithAttachment : emailContentsBase
     {
         public required Attachment[] attachments;
     }
