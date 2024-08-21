@@ -4,14 +4,10 @@ using lesson5_MVC_Routing.Models;
 
 namespace lesson5_MVC_Routing.Controllers;
 
-public class HomeController : Controller
+public class HomeController
+    (ILogger<HomeController> logger)
+    : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
 
     public IActionResult Index()
     {
