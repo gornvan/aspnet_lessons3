@@ -8,6 +8,7 @@ public class HomeController
     (ILogger<HomeController> logger)
     : Controller
 {
+    [HttpGet]
     public IActionResult Index()
     {
         var incominConnection = HttpContext.Connection;
@@ -18,12 +19,14 @@ public class HomeController
         return View(incomingAddress);
     }
 
+    [HttpGet]
     public IActionResult Privacy(int id = 0)
     {
         return View(id);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [HttpGet]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
