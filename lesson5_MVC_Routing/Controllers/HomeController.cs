@@ -18,9 +18,9 @@ public class HomeController
         return View(incomingAddress);
     }
 
-    public IActionResult Privacy()
+    public IActionResult Privacy(int id = 0)
     {
-        return View();
+        return View(id);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
