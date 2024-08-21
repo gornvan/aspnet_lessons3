@@ -8,10 +8,14 @@ public class HomeController
     (ILogger<HomeController> logger)
     : Controller
 {
-
     public IActionResult Index()
     {
-        return View();
+        var incominConnection = HttpContext.Connection;
+        var incomingAddress = incominConnection.RemoteIpAddress;
+
+        logger.LogInformation($"[{incomingAddress}] has accessed the Index of Home!");
+
+        return View(incomingAddress);
     }
 
     public IActionResult Privacy()
