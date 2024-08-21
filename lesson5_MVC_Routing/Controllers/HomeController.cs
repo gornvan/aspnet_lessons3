@@ -19,7 +19,7 @@ public class HomeController
         return View(incomingAddress);
     }
 
-    [HttpGet]
+    [HttpGet("/P/{id?}")]
     public IActionResult Privacy(int id = 0)
     {
         return View(id);
