@@ -1,4 +1,4 @@
-namespace FriendsManager.MVC.Models;
+namespace FriendsManager.MVC.ViewModels;
 
 public class ErrorViewModel
 {

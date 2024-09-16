@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using FriendsManager.MVC.Models;
+using FriendsManager.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FriendsManager.MVC.Controllers;
