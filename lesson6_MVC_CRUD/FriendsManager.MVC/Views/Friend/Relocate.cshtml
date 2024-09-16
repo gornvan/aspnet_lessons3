@@ -1,0 +1,21 @@
+﻿@using FriendsManager.MVC.ViewModels.Friend
+@model RelocateFriendModel
+@{
+    ViewData["Title"] = "Relocate a Friend";
+}
+
+<h2>Relocate a Friend</h2>
+
+<form method="post" asp-controller="Friend" asp-action="Relocate">
+    <div class="mb-3">
+        <label for="FriendId" class="form-label">Friend ID</label>
+        <input type="number" class="form-control" id="FriendId" name="FriendId" value="@Model.FriendId" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Place" class="form-label">New Place</label>
+        <input type="text" class="form-control" id="Place" name="Place" value="@Model.Place" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Relocate</button>
+</form>

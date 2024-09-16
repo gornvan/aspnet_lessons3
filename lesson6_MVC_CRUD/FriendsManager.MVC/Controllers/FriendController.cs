@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FriendsManager.Model;
+using FriendsManager.MVC.ViewModels.Friend;
 
 namespace FriendsManager.MVC.Controllers
 {
@@ -42,7 +43,7 @@ namespace FriendsManager.MVC.Controllers
             var friend = _friends
                 .FirstOrDefault(f => f.FriendID == id);
 
-            if(friend == null)
+            if (friend == null)
             {
                 return NotFound();
             }
@@ -53,7 +54,7 @@ namespace FriendsManager.MVC.Controllers
         [HttpPost]
         public IActionResult Edit(Friend friend)
         {
-            if (! ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(friend);
             }
@@ -97,6 +98,41 @@ namespace FriendsManager.MVC.Controllers
             }
 
             _friends.RemoveAt(existingFriendIndex);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Relocate(int id)
+        {
+            var existingFriend = _friends
+                .FirstOrDefault(f => f.FriendID == id);
+
+            if (existingFriend == null)
+            {
+                return NotFound();
+            }
+
+            return View(new RelocateFriendModel(existingFriend));
+        }
+
+        [HttpPost]
+        public IActionResult Relocate(RelocateFriendModel relocation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(relocation);
+            }
+
+            var existingFriend = _friends
+                .FirstOrDefault(f => f.FriendID == relocation.FriendId);
+
+            if (existingFriend == null)
+            {
+                return NotFound();
+            }
+
+            existingFriend.Place = relocation.Place;
 
             return RedirectToAction(nameof(Index));
         }

@@ -19,6 +19,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Place</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +29,21 @@
                         <td>@friend.FriendID</td>
                         <td>@friend.FriendName</td>
                         <td>@friend.Place</td>
+                        <td>
+                            <a href="@Url.Action(nameof(FriendController.Relocate),
+                            new {id = friend.FriendID})"
+                            class="btn btn-outline-secondary">
+                                <i class="bi bi-box-arrow-up-right"></i> Relocate
+                            </a>
+
+                            @* Another way of building the link - with taghelpers: *@
+
+                            <a asp-action="@nameof(FriendController.Relocate)" 
+                            asp-route-Id="@friend.FriendID"
+                            class="btn btn-primary mx-2">
+                                <i class="bi bi-box-arrow-up-right"></i> Relocate
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -44,6 +60,12 @@
                         <h5 class="card-title">@friend.FriendName</h5>
                         <p class="card-text"><strong>ID:</strong> @friend.FriendID</p>
                         <p class="card-text"><strong>Place:</strong> @friend.Place</p>
+                        <td>
+                            <a href="@Url.Action(nameof(FriendController.Relocate))"
+                               class="btn btn-outline-secondary">
+                                <i class="bi bi-box-arrow-up-right"></i> Relocate
+                            </a>
+                        </td>
                     </div>
                 </div>
             </div>
