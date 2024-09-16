@@ -1,8 +1,8 @@
 using System.Diagnostics;
+using FriendsManager.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using lesson5_MVC_Routing.Models;
 
-namespace lesson5_MVC_Routing.Controllers;
+namespace FriendsManager.MVC.Controllers;
 
 public class HomeController
     (ILogger<HomeController> logger)

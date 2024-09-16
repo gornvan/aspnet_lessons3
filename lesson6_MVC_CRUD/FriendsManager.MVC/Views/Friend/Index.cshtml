@@ -1,0 +1,53 @@
+﻿@using FriendsManager.MVC.Controllers
+@model IList<Friend>
+@{
+	ViewData["Title"] = "Friends list";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Friends List</h1>
+
+    <a href="@Url.Action(nameof(FriendController.Create))" class="btn btn-primary btn-lg">
+        <i class="bi bi-person-plus"></i> Add New Friend
+    </a>
+
+    <!-- Responsive table for listing friends -->
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Place</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var friend in Model)
+                {
+                    <tr>
+                        <td>@friend.FriendID</td>
+                        <td>@friend.FriendName</td>
+                        <td>@friend.Place</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Optionally add cards view for mobile devices -->
+    <div class="row d-md-none d-flex">
+        @foreach (var friend in Model)
+        {
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@friend.FriendName</h5>
+                        <p class="card-text"><strong>ID:</strong> @friend.FriendID</p>
+                        <p class="card-text"><strong>Place:</strong> @friend.Place</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

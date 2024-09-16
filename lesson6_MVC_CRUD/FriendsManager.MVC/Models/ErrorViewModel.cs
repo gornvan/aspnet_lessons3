@@ -1,4 +1,4 @@
-namespace lesson5_MVC_Routing.Models;
+namespace FriendsManager.MVC.Models;
 
 public class ErrorViewModel
 {

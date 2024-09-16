@@ -1,0 +1,22 @@
+﻿@model Friend
+@{
+	ViewData["Title"] = "Create";
+}
+
+<h1>CreateFriend</h1>
+
+<form method="post" asp-controller="Friend" asp-action="Create">
+	<label asp-for="FriendName"></label>
+	<input asp-for="FriendName" />
+	<span asp-validation-for="FriendName"></span>
+
+	<label asp-for="FriendID"></label>
+	<input asp-for="FriendID" />
+	<span asp-validation-for="FriendID"></span>
+
+	<label asp-for="Place"></label>
+	<input asp-for="Place" />
+	<span asp-validation-for="Place"></span>
+
+	<input type="submit" value="Create" />
+</form>
