@@ -1,10 +1,9 @@
-using System;
-
-namespace IO.Swagger.Client {
-  /// <summary>
-  /// API Exception
-  /// </summary>
-  public class ApiException : Exception {
+namespace IO.Swagger.Client
+{
+    /// <summary>
+    /// API Exception
+    /// </summary>
+    public class ApiException : Exception {
       /// <summary>
       /// Gets or sets the error code (HTTP status code)
       /// </summary>

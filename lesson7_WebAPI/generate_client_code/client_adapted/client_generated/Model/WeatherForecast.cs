@@ -1,16 +1,14 @@
-using System;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Text;
 
-namespace IO.Swagger.Model {
+namespace IO.Swagger.Model
+{
 
-  /// <summary>
-  /// 
-  /// </summary>
-  [DataContract]
+    /// <summary>
+    /// 
+    /// </summary>
+    [DataContract]
   public class WeatherForecast {
     /// <summary>
     /// Gets or Sets Date

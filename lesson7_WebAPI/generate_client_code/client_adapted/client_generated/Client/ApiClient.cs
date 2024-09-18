@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Web;
-using System.Linq;
-using System.Net;
-using System.Text;
-using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Extensions;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace IO.Swagger.Client
 {
@@ -24,7 +16,7 @@ namespace IO.Swagger.Client
         /// Initializes a new instance of the <see cref="ApiClient" /> class.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath="http://localhost:5016/api/2.0.0.0")
+        public ApiClient(String basePath="http://localhost:5016")
         {
             BasePath = basePath;
             RestClient = new RestClient(BasePath);
@@ -161,7 +153,7 @@ namespace IO.Swagger.Client
         /// <param name="type">Object type.</param>
         /// <param name="headers">HTTP headers.</param>
         /// <returns>Object representation of the JSON string.</returns>
-        public object Deserialize(string content, Type type, IList<Parameter> headers=null)
+        public object? Deserialize(string content, Type type, IList<Parameter> headers=null)
         {
             if (type == typeof(Object)) // return an object
             {
@@ -200,7 +192,12 @@ namespace IO.Swagger.Client
             // at this point, it must be a model (json)
             try
             {
-                return JsonConvert.DeserializeObject(content, type);
+                var jsonconfig = new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                var result = JsonSerializer.Deserialize(content, type, jsonconfig);
+                return result;
             }
             catch (IOException e)
             {
@@ -213,11 +210,11 @@ namespace IO.Swagger.Client
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>JSON string.</returns>
-        public string Serialize(object obj)
+        public string? Serialize(object obj)
         {
             try
             {
-                return obj != null ? JsonConvert.SerializeObject(obj) : null;
+                return obj != null ? JsonSerializer.Serialize(obj) : null;
             }
             catch (Exception e)
             {
