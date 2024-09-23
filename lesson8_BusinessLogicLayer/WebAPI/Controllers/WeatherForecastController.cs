@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Synopticum.Business;
+using SynopticumCore.Model;
 
 namespace lesson8_WebApi.Controllers
 {

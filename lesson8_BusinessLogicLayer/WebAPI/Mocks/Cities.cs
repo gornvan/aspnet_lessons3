@@ -1,4 +1,4 @@
-﻿using Synopticum.Business;
+﻿using SynopticumCore.Model;
 
 namespace lesson8_WebApi
 {

@@ -1,4 +1,4 @@
-namespace Synopticum.Business
+namespace SynopticumCore.Model
 {
     public class WeatherForecast
     {

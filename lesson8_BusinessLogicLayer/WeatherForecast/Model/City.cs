@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Synopticum.Business
+namespace SynopticumCore.Model
 {
     public class City
     {
