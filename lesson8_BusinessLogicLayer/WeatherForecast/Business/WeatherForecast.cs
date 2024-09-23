@@ -1,4 +1,4 @@
-namespace WeatherForecast.Business
+namespace Synopticum.Business
 {
     public class WeatherForecast
     {

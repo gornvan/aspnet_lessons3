@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WeatherForecast.Business
+namespace Synopticum.Business
 {
     public class City
     {
