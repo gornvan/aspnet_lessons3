@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Synopticum.Business;
 
 namespace lesson8_WebApi.Controllers
 {
@@ -23,21 +24,28 @@ namespace lesson8_WebApi.Controllers
         /// Example of a RESTful endpoint allowing to filter, paginate and project the data
         /// </summary>
         /// <returns></returns>
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet(
+            template:"countries/{countryName}/cities/{cityName}",
+            Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast?> Get(
+            string countryName,
+            string cityName,
             int minTemperatureC,
             int maxTemperatureC,
             int pageSize = 5,
             int pageNumber = 1,
             [FromQuery] string[]? fields = null)
         {
+            var targetCity = Mocks.Cities.First(c => c.Name == cityName && c.Country.Name == countryName);
+
             var unprojectedQuery = Enumerable.Range(1, 1024 * 1024 * 1024 /* Emulating a LARGE source of data which we will not consume in full thanks to Pagination */)
                 .Select(index =>
                 new WeatherForecast
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                     TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                    Summary = Summaries[Random.Shared.Next(Summaries.Length)],
+                    City = targetCity
                 })
                 // Always filter BEFORE paging
                 .Where(forecast =>
@@ -82,14 +90,20 @@ namespace lesson8_WebApi.Controllers
         /// <param name="daysAhead">The day of interest</param>
         /// <returns></returns>
         [Produces("application/json", new[] { "text/plain" })]
-        [HttpGet(template: "{daysAhead}", Name = "GetWeathForecastForConcreteDayAhead")]
-        public IActionResult Get(int daysAhead)
+        [HttpGet(template: "countries/{countryName}/cities/{cityName}/futureDay/{daysAhead}", Name = "GetWeathForecastForConcreteDayAhead")]
+        public IActionResult Get(
+            string countryName,
+            string cityName,
+            int daysAhead)
         {
+            var targetCity = Mocks.Cities.First(c => c.Name == cityName && c.Country.Name == countryName);
+
             var forecast = new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(daysAhead)),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)],
+                City = targetCity
             };
 
             var accept = Request.GetTypedHeaders().Accept;
