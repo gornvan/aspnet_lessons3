@@ -1,4 +1,4 @@
-﻿using SynopticumCore.Model;
+﻿using SynopticumCore.Contract.Model;
 
 namespace lesson8_WebApi
 {
@@ -8,6 +8,11 @@ namespace lesson8_WebApi
         {
             new City
             {
+                Name = "Hrodna",
+                Country = new Country { Name = "Belarus" }
+            },
+            new City
+            {
                 Name = "Minsk",
                 Country = new Country { Name = "Belarus" }
             },
@@ -15,6 +20,11 @@ namespace lesson8_WebApi
             {
                 Name = "Tbilisi",
                 Country  = new Country { Name = "Georgia" }
+            },
+            new City
+            {
+                Name = "Vatican",
+                Country  = new Country { Name = "Vatican" }
             }
         };
     }

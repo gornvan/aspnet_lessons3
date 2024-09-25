@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherForecast\SynopticumCore.csproj" />
+    <ProjectReference Include="..\SynopticumCore\SynopticumCore.csproj" />
   </ItemGroup>
 
 </Project>

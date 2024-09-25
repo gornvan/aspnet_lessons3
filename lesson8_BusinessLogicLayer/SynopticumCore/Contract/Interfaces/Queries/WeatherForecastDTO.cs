@@ -1,8 +1,7 @@
-namespace SynopticumCore.Model
+﻿namespace SynopticumCore.Contract.Interfaces.Queries
 {
-    public class WeatherForecast
+    public class WeatherForecastDTO
     {
-        
         public required DateOnly? Date { get; set; }
 
         public required int TemperatureC { get; set; }
@@ -17,6 +16,7 @@ namespace SynopticumCore.Model
 
         public required string Summary { get; set; }
 
-        public required City City { get; set; }
+        public required string City { get; set; }
+        public required string Country { get; set; }
     }
 }

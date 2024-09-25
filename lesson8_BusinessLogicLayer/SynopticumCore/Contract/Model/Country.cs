@@ -1,4 +1,4 @@
-﻿namespace SynopticumCore.Model
+﻿namespace SynopticumCore.Contract.Model
 {
     public class Country
     {
