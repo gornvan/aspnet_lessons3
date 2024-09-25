@@ -1,24 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using SynopticumCore.Model;
+using SynopticumCore.Contract.Interfaces.Queries;
+using SynopticumCore.Contract.Interfaces.WeatherForecastService;
+using SynopticumCore.Contract.Model;
 
 namespace lesson8_WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController(
+        IWeatherForecastService _weatherForecastService,
+        ILogger<WeatherForecastController> _logger
+        ) : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
 
         /// <summary>
         /// Example of a RESTful endpoint allowing to filter, paginate and project the data
@@ -27,7 +21,7 @@ namespace lesson8_WebApi.Controllers
         [HttpGet(
             template:"countries/{countryName}/cities/{cityName}",
             Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast?> Get(
+        public async Task<IActionResult> Get(
             string countryName,
             string cityName,
             int minTemperatureC,
@@ -36,31 +30,40 @@ namespace lesson8_WebApi.Controllers
             int pageNumber = 1,
             [FromQuery] string[]? fields = null)
         {
-            var targetCity = Mocks.Cities.First(c => c.Name == cityName && c.Country.Name == countryName);
+            // prepare query for the service
+            var query = new MultipleWeatherForecastQuery
+            {
+                CityName = cityName,
+                CountryName = countryName,
+                MaxTemperatureC = maxTemperatureC,
+                MinTemperatureC = minTemperatureC,
+            };
 
-            var unprojectedQuery = Enumerable.Range(1, 1024 * 1024 * 1024 /* Emulating a LARGE source of data which we will not consume in full thanks to Pagination */)
-                .Select(index =>
-                new WeatherForecast
-                {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)],
-                    City = targetCity
-                })
-                // Always filter BEFORE paging
-                .Where(forecast =>
-                    forecast.TemperatureC >= minTemperatureC
-                    &&
-                    forecast.TemperatureC <= maxTemperatureC)
-                // Always page AFTER filtering
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize);
+            try
+            {
+                // call the service
+                var serviceQuery = await _weatherForecastService.GetForecast(query);
 
-            var projectedQuery = fields == null
-                ? unprojectedQuery
-                : unprojectedQuery.Select(forecast => MutateObjectToGetProjection(forecast, fields));
+                // apply pagination and projection
+                var paginatedQuery = serviceQuery  // Always page AFTER filtering
+                    .Skip(pageSize * (pageNumber - 1))
+                    .Take(pageSize);
 
-            return projectedQuery.ToList();
+                var projectedQuery = fields == null
+                    ? paginatedQuery
+                    : paginatedQuery.Select(forecast => MutateObjectToGetProjection(forecast, fields));
+
+                return new JsonResult(projectedQuery.ToList());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Unexpected error, please try again or contact support, sorry for the inconvenience");
+            }
+
         }
 
         private static T? MutateObjectToGetProjection<T>(T? originalObject, string[] fieldNames) where T: class
@@ -91,38 +94,55 @@ namespace lesson8_WebApi.Controllers
         /// <returns></returns>
         [Produces("application/json", new[] { "text/plain" })]
         [HttpGet(template: "countries/{countryName}/cities/{cityName}/futureDay/{daysAhead}", Name = "GetWeathForecastForConcreteDayAhead")]
-        public IActionResult Get(
+        public async Task<IActionResult> Get(
             string countryName,
             string cityName,
             int daysAhead)
         {
-            var targetCity = Mocks.Cities.First(c => c.Name == cityName && c.Country.Name == countryName);
-
-            var forecast = new WeatherForecast
+            // prepare query for the service
+            var query = new MultipleWeatherForecastQuery
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(daysAhead)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)],
-                City = targetCity
+                CityName = cityName,
+                CountryName = countryName,
             };
 
-            var accept = Request.GetTypedHeaders().Accept;
-            switch (accept[0].MediaType.ToString())
+            try
             {
-                case "application/json":
-                case "*/*":
-                default:
-                    return new JsonResult(forecast);
+                // call the service
+                var serviceQuery = await _weatherForecastService.GetForecast(query);
 
-                case "text/plain":
-                    return Content(
-                        $"""
+                // apply pagination
+                var forecast = serviceQuery  // Always page AFTER filtering
+                    .Skip(daysAhead)
+                    .First();
+
+                var accept = Request.GetTypedHeaders().Accept;
+                switch (accept[0].MediaType.ToString())
+                {
+                    case "application/json":
+                    case "*/*":
+                    default:
+                        return new JsonResult(forecast);
+
+                    case "text/plain":
+                        return Content(
+                            $"""
                         Date: {forecast.Date};
                         The temperature will be {forecast.TemperatureC} Celcius;
                         It will feel {forecast.Summary}.
                         """
-                        );
+                            );
+                }
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Unexpected error, please try again or contact support, sorry for the inconvenience");
+            }
+
         }
     }
 }
