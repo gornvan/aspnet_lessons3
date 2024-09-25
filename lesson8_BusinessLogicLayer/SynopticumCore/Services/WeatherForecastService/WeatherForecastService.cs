@@ -38,9 +38,10 @@ namespace SynopticumCore.Services.WeatherForecastService
                 })
                 // Always filter BEFORE paging
                 .Where(forecast =>
-                    forecast.TemperatureC >= query.MinTemperatureC
+                    ( query.MinTemperatureC == null || forecast.TemperatureC >= query.MinTemperatureC )
                     &&
-                    forecast.TemperatureC <= query.MaxTemperatureC);
+                    ( query.MaxTemperatureC == null || forecast.TemperatureC <= query.MaxTemperatureC )
+                    );
         }
     }
 }
