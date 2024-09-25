@@ -2,7 +2,7 @@
 
 namespace SynopticumCore.Contract.Interfaces.WeatherForecastService
 {
-    public interface IWeatherForecastService
+    public interface IWeatherForecastService : IService
     {
         Task<IEnumerable<WeatherForecastDTO>> GetForecast(MultipleWeatherForecastQuery query);
     }

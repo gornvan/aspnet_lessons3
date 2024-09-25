@@ -1,5 +1,6 @@
 
 using lesson8_WebApi.Middlewares;
+using SynopticumCore;
 using System.Reflection;
 
 namespace lesson8_WebApi
@@ -22,6 +23,8 @@ namespace lesson8_WebApi
             {
                 options.EnableForHttps = true;
             });
+
+            SynopticumCoreModule.RegisterModule(builder.Services);
 
             var app = builder.Build();
 
