@@ -1,4 +1,4 @@
-﻿namespace SynopticumCore.Contract.Interfaces.Queries
+﻿namespace SynopticumCore.Contract.Interfaces.Queries.WeatherForecastQuery
 {
     public class WeatherForecastDTO
     {
