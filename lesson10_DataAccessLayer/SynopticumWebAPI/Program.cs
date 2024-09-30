@@ -1,6 +1,7 @@
 
 using lesson8_WebApi.Middlewares;
 using SynopticumCore;
+using SynopticumWebAPI;
 using System.Reflection;
 
 namespace lesson8_WebApi
@@ -18,6 +19,8 @@ namespace lesson8_WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            DALConfigurer.Configure(builder.Services, builder.Configuration);
 
             builder.Services.AddResponseCompression(options =>
             {
