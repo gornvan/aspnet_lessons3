@@ -17,7 +17,9 @@ public partial class SynopticumDbContext : DbContext
         modelBuilder
             .UseCollation("utf8mb3_bin")
             .HasCharSet("utf8mb3");
-        
+
+        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
         OnModelCreatingPartial(modelBuilder);
     }
 
