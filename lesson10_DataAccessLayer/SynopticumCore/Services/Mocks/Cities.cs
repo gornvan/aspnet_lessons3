@@ -1,4 +1,5 @@
-﻿using SynopticumCore.Contract.Model;
+﻿
+using SynopticumModel.Entities;
 
 namespace lesson8_WebApi
 {
