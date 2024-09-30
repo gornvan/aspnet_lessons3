@@ -1,6 +1,8 @@
 
 using lesson8_WebApi.Middlewares;
 using SynopticumCore;
+using SynopticumDAL;
+using SynopticumDAL.Seed;
 using SynopticumWebAPI;
 using System.Reflection;
 
@@ -8,7 +10,7 @@ namespace lesson8_WebApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,8 @@ namespace lesson8_WebApi
 
             DALConfigurer.Configure(builder.Services, builder.Configuration);
 
+
+
             builder.Services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
@@ -30,6 +34,8 @@ namespace lesson8_WebApi
             SynopticumCoreModule.RegisterModule(builder.Services);
 
             var app = builder.Build();
+
+            await DbInitializer.InitializeDb(app.Services);
 
             app.UseHttpLogging();
 
