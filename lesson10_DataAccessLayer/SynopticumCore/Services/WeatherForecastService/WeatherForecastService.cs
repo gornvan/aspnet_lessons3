@@ -1,17 +1,12 @@
 ﻿using lesson8_WebApi;
-using SynopticumCore.Contract.Interfaces.Queries;
+using SynopticumCore.Contract.Interfaces.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
-using SynopticumCore.Contract.Model;
+using SynopticumModel.Enums;
 
 namespace SynopticumCore.Services.WeatherForecastService
 {
     public class WeatherForecastService : IWeatherForecastService
     {
-        private static readonly string[] Summaries = new[]
-            {
-                "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
-
         public async Task<IEnumerable<WeatherForecastDTO>> GetForecast(MultipleWeatherForecastQuery query)
         {
             var targetCity = Mocks.Cities
@@ -32,7 +27,12 @@ namespace SynopticumCore.Services.WeatherForecastService
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                     TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)],
+                    Summary = (
+                        (WeatherSummary)
+                        Random.Shared.Next(
+                            1,
+                            Enum.GetValues<WeatherSummary>().Length)
+                        ).ToString(),
                     City = targetCity.Name,
                     Country = targetCity.Country.Name,
                 })
