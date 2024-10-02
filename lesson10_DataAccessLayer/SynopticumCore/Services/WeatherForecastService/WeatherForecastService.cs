@@ -1,5 +1,5 @@
 ﻿using lesson8_WebApi;
-using SynopticumCore.Contract.Interfaces.Queries.WeatherForecastQuery;
+using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
 using SynopticumModel.Enums;
 

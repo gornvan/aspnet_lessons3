@@ -1,4 +1,4 @@
-using SynopticumCore.Contract.Interfaces.Queries.WeatherForecastQuery;
+using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
 using SynopticumCore.Services.WeatherForecastService;
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using SynopticumCore.Contract.Interfaces.Queries.WeatherForecastQuery;
+using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
 
 namespace lesson8_WebApi.Controllers
