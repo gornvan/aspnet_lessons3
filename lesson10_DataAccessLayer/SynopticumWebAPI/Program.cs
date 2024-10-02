@@ -37,13 +37,12 @@ namespace lesson8_WebApi
 
             await DbInitializer.InitializeDb(app.Services);
 
-            app.UseHttpLogging();
-
             ApplyApiVersionRoutePrefix(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseHttpLogging();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
