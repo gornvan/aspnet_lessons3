@@ -3,7 +3,7 @@ using SynopticumModel.Enums;
 
 namespace SynopticumModel.Entities;
 
-public class WeatherForecast : IEntity
+public class WeatherForecast: EntityBase<int>
 {
     public required DateOnly? Date { get; set; }
 
