@@ -22,7 +22,7 @@ namespace lesson8_WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            DALConfigurer.Configure(builder.Services, builder.Configuration);
+            DALConfigurer.Configure(builder.Services, builder.Configuration, builder.Environment.IsDevelopment());
 
 
 
