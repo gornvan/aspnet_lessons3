@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SynopticumDAL;
+namespace SynopticumDAL.Services;
 
 public partial class SynopticumDbContext : DbContext
 {
@@ -18,7 +18,7 @@ public partial class SynopticumDbContext : DbContext
             .UseCollation("utf8mb3_bin")
             .HasCharSet("utf8mb3");
 
-        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
         OnModelCreatingPartial(modelBuilder);
     }

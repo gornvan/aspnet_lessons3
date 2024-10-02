@@ -2,7 +2,7 @@
 using SynopticumDAL.Contract;
 using SynopticumModel.Contract;
 
-namespace SynopticumDAL
+namespace SynopticumDAL.Services
 {
     public class Repository<TEntity>
         (DbSet<TEntity> _dbSet)

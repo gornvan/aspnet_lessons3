@@ -1,5 +1,4 @@
-﻿
-namespace SynopticumDAL
+﻿namespace SynopticumDAL.Contract.Exceptions
 {
     [Serializable]
     internal class UnitOfWorkAlreadyInTransactionStateException : Exception
