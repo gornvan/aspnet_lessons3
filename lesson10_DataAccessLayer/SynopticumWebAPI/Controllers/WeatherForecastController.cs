@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
+using Microsoft.EntityFrameworkCore;
 
 namespace lesson8_WebApi.Controllers
 {
@@ -44,9 +45,10 @@ namespace lesson8_WebApi.Controllers
                 var serviceQuery = await _weatherForecastService.GetForecast(query);
 
                 // apply pagination and projection
-                var paginatedQuery = serviceQuery  // Always page AFTER filtering
+                var paginatedQuery = await serviceQuery  // Always page AFTER filtering
                     .Skip(pageSize * (pageNumber - 1))
-                    .Take(pageSize);
+                    .Take(pageSize)
+                    .ToListAsync();
 
                 var projectedQuery = fields == null
                     ? paginatedQuery
