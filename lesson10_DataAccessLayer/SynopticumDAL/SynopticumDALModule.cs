@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SynopticumDAL;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using SynopticumDAL.Contract;
+using SynopticumDAL.Services;
 
-namespace SynopticumWebAPI
+namespace SynopticumDAL
 {
-    public static class DALConfigurer
+    public static class SynopticumDALModule
     {
-        public static void Configure(IServiceCollection services, IConfiguration configuration, bool isDevelopment)
+        public static void RegisterModule(IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
             var connectionString = configuration.GetConnectionString("Default");
 
@@ -26,6 +30,8 @@ namespace SynopticumWebAPI
                     }
                 }
             );
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }
