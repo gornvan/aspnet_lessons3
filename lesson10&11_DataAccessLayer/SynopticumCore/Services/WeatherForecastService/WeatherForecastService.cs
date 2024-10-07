@@ -72,7 +72,7 @@ namespace SynopticumCore.Services.WeatherForecastService
                     .Where(forecast => query.CityName == null || forecast.City.Country.Id == targetCountry.Id);
             }
 
-            return repoQuery
+            return repoQueryWithFilter
                 .Select(forecast =>
                 new WeatherForecastDTO
                 {
