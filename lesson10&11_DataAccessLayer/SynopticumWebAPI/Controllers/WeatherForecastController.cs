@@ -24,8 +24,8 @@ namespace lesson8_WebApi.Controllers
         public async Task<IActionResult> Get(
             string countryName,
             string cityName,
-            int minTemperatureC,
-            int maxTemperatureC,
+            int? minTemperatureC,
+            int? maxTemperatureC,
             int pageSize = 5,
             int pageNumber = 1,
             [FromQuery] string[]? fields = null)
