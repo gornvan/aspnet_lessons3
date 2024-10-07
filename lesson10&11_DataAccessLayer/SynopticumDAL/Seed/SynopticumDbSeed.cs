@@ -36,6 +36,7 @@ namespace SynopticumDAL.Seed
             var cities = new[]
             {
                 new City { Name = "Minsk", Country = countries[0] },
+                new City { Name = "Hrodna", Country = countries[0] },
                 new City { Name = "Berlin", Country = countries[1] },
                 new City { Name = "Rio de Janeiro", Country = countries[2] },
                 new City { Name = "Tokyo", Country = countries[3] },
