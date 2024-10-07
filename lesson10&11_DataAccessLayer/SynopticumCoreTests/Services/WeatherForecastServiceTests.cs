@@ -1,5 +1,5 @@
-using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
+using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Services.WeatherForecastService;
 
 namespace SynopticumCoreTests.Services
@@ -10,12 +10,13 @@ namespace SynopticumCoreTests.Services
         public WeatherForecastServiceTests()
         {
             // arrange
-            weatherForecastService = new WeatherForecastService();
+            var uow = UoWInitializer.Initialize();
+            weatherForecastService = new WeatherForecastService(uow);
         }
 
         [Theory]
         [InlineData("Belarus", "Hrodna", -100, 100)]
-        [InlineData("Vatican", "Vatican", -100, 100)]
+        [InlineData("Australia", "Sydney", -100, 100)]
         public async Task GetAtLeastOneFilledWeatherForecast(
             string countryName,
             string? cityName,
