@@ -12,26 +12,37 @@ namespace SynopticumDAL
         public static void RegisterModule(IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
             var connectionString = configuration.GetConnectionString("Default");
-
             var serverVersion = configuration.GetSection("MySql").GetValue<string>("Version");
 
             services.AddDbContext<SynopticumDbContext>(
-                dbContextOptions => {
-                    dbContextOptions
-                        .UseMySql(connectionString, ServerVersion.Parse(serverVersion))
-                        // The following three options help with debugging, but should
-                        // be changed or removed for production.
-                        .LogTo(Console.WriteLine, LogLevel.Warning);
-                    if (isDevelopment)
-                    {
-                        dbContextOptions
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors();
-                    }
-                }
+                dbOptionsBuilder => ConfigureDbOptionsBuilderForMySql(
+                    dbOptionsBuilder,
+                    connectionString,
+                    serverVersion,
+                    isDevelopment
+                    )
             );
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static void ConfigureDbOptionsBuilderForMySql(
+            DbContextOptionsBuilder builder,
+            string connectionString,
+            string mySqlServerVersion,
+            bool isDevelopment)
+        {
+            builder
+                .UseMySql(connectionString, ServerVersion.Parse(mySqlServerVersion))
+                // The following three options help with debugging, but should
+                // be changed or removed for production.
+                .LogTo(Console.WriteLine, LogLevel.Warning);
+            if (isDevelopment)
+            {
+                builder
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
+            }
         }
     }
 }
