@@ -4,14 +4,12 @@ namespace SynopticumDAL.Services;
 
 public partial class SynopticumDbContext : DbContext
 {
-    public SynopticumDbContext()
-    {
-    }
-
     public SynopticumDbContext(DbContextOptions<SynopticumDbContext> options)
         : base(options)
     {
     }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
