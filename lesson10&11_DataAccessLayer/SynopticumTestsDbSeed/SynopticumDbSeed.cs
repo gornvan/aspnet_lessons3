@@ -3,7 +3,7 @@ using SynopticumDAL.Services;
 using SynopticumModel.Entities;
 using SynopticumModel.Enums;
 
-namespace SynopticumDAL.Seed
+namespace SynopticumTestsDbSeed
 {
     public class SynopticumDbSeed(
         SynopticumDbContext _dbcontext)
