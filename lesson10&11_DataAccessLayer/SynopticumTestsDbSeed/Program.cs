@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using SynopticumCoreTests;
 using SynopticumDAL;
-using SynopticumDAL.Seed;
 using SynopticumDAL.Services;
 
 namespace SynopticumTestsDbSeed

@@ -1,5 +1,5 @@
-﻿using SynopticumDAL.Seed;
-using SynopticumDAL.Services;
+﻿using SynopticumDAL.Services;
+using SynopticumTestsDbSeed;
 
 namespace SynopticumWebAPI
 {
