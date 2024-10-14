@@ -12,8 +12,8 @@ using SynopticumDAL.Services;
 namespace SynopticumDAL.Migrations
 {
     [DbContext(typeof(SynopticumDbContext))]
-    [Migration("20241007182650_initial")]
-    partial class initial
+    [Migration("20241007185220_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
