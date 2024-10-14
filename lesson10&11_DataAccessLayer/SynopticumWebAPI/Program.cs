@@ -2,7 +2,6 @@
 using lesson8_WebApi.Middlewares;
 using SynopticumCore;
 using SynopticumDAL;
-using SynopticumDAL.Seed;
 using SynopticumWebAPI;
 using System.Reflection;
 
