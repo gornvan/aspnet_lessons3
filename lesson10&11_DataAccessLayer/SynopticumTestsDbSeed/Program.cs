@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SynopticumCoreTests;
-using SynopticumDAL;
-using SynopticumDAL.Services;
 
 namespace SynopticumTestsDbSeed
 {

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using SynopticumDAL.Contract;
 using SynopticumDAL.Contract.Exceptions;
 
@@ -7,7 +6,7 @@ namespace SynopticumDAL.Services
 {
     public class UnitOfWork(SynopticumDbContext _context) : IUnitOfWork
     {
-        private IDbContextTransaction _currentTransaction;
+        private IDbContextTransaction? _currentTransaction;
 
         public IDbContextTransaction BeginTransaction()
         {
