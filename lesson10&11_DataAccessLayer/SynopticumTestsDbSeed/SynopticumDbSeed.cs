@@ -8,6 +8,8 @@ namespace SynopticumTestsDbSeed
     public class SynopticumDbSeed(
         SynopticumDbContext _dbcontext)
     {
+        private const int DataCopies = 6000;
+
         public async Task Seed()
         {
             var citySet = _dbcontext.Set<City>();
@@ -26,9 +28,13 @@ namespace SynopticumTestsDbSeed
 
             foreach (var country in countries)
             {
-                if (!await countrySet.AnyAsync(c => c.Name == country.Name))
+                for (var i = 0; i < DataCopies; i++)
                 {
-                    await countrySet.AddAsync(country);
+                    var name = $"{country.Name}{i}";
+                    if (!await countrySet.AnyAsync(c => c.Name == name))
+                    {
+                        await countrySet.AddAsync(new Country { Name = name });
+                    }
                 }
             }
 
@@ -43,11 +49,13 @@ namespace SynopticumTestsDbSeed
                 new City { Name = "Sydney", Country = countries[4] }
             };
 
+            for (var i = 0; i< DataCopies; i++)
             foreach (var city in cities)
             {
-                if (!await citySet.AnyAsync(c => c.Name == city.Name))
+                var name = $"{city.Name}{i}";
+                if (!await citySet.AnyAsync(c => c.Name == name))
                 {
-                    await citySet.AddAsync(city);
+                        await citySet.AddAsync(new City { Name = name, Country = city.Country }); 
                 }
             }
 
