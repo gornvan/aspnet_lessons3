@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+﻿#!/usr/bin/bash
 
 thisScriptDir=`dirname $0`
 thisScriptDirRP=`realpath $thisScriptDir`
