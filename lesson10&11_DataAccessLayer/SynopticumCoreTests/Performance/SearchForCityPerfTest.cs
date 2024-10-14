@@ -31,7 +31,7 @@ namespace SynopticumCoreTests.Performance
             {
                 foreach (var name in cityNames)
                 {
-                    var city = await cityRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name == name);
+                    var city = await cityRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name.StartsWith(name.Substring(0, 3)));
                 }
             }
 
@@ -41,7 +41,7 @@ namespace SynopticumCoreTests.Performance
                 {
                     var stopwatch = Stopwatch.StartNew();
 
-                    var city = await cityRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name == name);
+                    var city = await cityRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name.StartsWith(name.Substring(0, 3)));
 
                     stopwatch.Stop();
                     totalTicks += stopwatch.ElapsedTicks;

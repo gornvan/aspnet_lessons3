@@ -32,7 +32,7 @@ public class SearchForCountryPerfTest
         {
             foreach (var name in countryNames)
             {
-                var country = await countryRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name == name);
+                var country = await countryRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name.StartsWith(name.Substring(0, 3)));
             }
         }
 
@@ -42,7 +42,7 @@ public class SearchForCountryPerfTest
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var country = await countryRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name == name);
+                var country = await countryRepo.AsReadOnlyQueryable().FirstOrDefaultAsync(c => c.Name.StartsWith(name.Substring(0, 3)));
 
                 stopwatch.Stop();
                 totalTicks += stopwatch.ElapsedTicks;
