@@ -6,9 +6,57 @@ using SynopticumModel.Entities;
 
 namespace SynopticumCore.Services.WeatherForecastService
 {
-    public class WeatherForecastService (IUnitOfWork _unitOfWork): IWeatherForecastService
+    public class WeatherForecastService(IUnitOfWork _unitOfWork) : IWeatherForecastService
     {
-        public async Task<IQueryable<WeatherForecastDTO>> GetForecast(MultipleWeatherForecastQuery query)
+        private async Task<City> LookupCityAndThrowIfNotFound(string cityName, string countryName)
+        {
+            var cityRepo = _unitOfWork.GetRepository<City>();
+
+            var targetCity = await cityRepo
+                    .AsReadOnlyQueryable()
+                    .FirstOrDefaultAsync(
+                        c => c.Name == cityName
+                        && c.Country.Name == countryName);
+
+            if (targetCity == null)
+            {
+                throw new KeyNotFoundException("No such city");
+            }
+
+            return targetCity;
+        }
+
+        public async Task<NewWeatherForecastResponse> AddForecast(NewWeatherForecast newForecast)
+        {
+            var targetCity = await LookupCityAndThrowIfNotFound(
+                cityName: newForecast.CityName,
+                countryName: newForecast.CountryName);
+
+            var newForecastEntity = new WeatherForecast
+            {
+                City = targetCity,
+                Date = newForecast.Date,
+                Summary = newForecast.Summary,
+                TemperatureC = newForecast.TemperatureC,
+            };
+
+            var forecastRepo = _unitOfWork.GetRepository<WeatherForecast>();
+            forecastRepo.Create(newForecastEntity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new NewWeatherForecastResponse
+            {
+                Id = newForecastEntity.Id,
+                CityName = newForecast.CityName,
+                CountryName = newForecast.CountryName,
+                Date = newForecast.Date,
+                Summary = newForecast.Summary,
+                TemperatureC = newForecast.TemperatureC,
+            };
+        }
+
+        public async Task<IQueryable<WeatherForecastResponse>> GetForecast(MultipleWeatherForecastQuery query)
         {
             var cityRepo = _unitOfWork.GetRepository<City>();
             var countryRepo = _unitOfWork.GetRepository<Country>();
@@ -19,16 +67,7 @@ namespace SynopticumCore.Services.WeatherForecastService
             // if city is requested, check if it exists
             if (query.CityName != null)
             {
-                targetCity = await cityRepo
-                    .AsReadOnlyQueryable()
-                    .FirstOrDefaultAsync(
-                        c => c.Name == query.CityName
-                        && c.Country.Name == query.CountryName);
-
-                if (targetCity == null)
-                {
-                    throw new KeyNotFoundException("No such city");
-                }
+                targetCity = await LookupCityAndThrowIfNotFound(query.CityName, query.CountryName);
             }
 
             if (targetCity == null)
@@ -74,7 +113,7 @@ namespace SynopticumCore.Services.WeatherForecastService
 
             return repoQueryWithFilter
                 .Select(forecast =>
-                new WeatherForecastDTO
+                new WeatherForecastResponse
                 {
                     Date = forecast.Date,
                     TemperatureC = forecast.TemperatureC,
@@ -83,5 +122,7 @@ namespace SynopticumCore.Services.WeatherForecastService
                     Country = query.CountryName,
                 });
         }
+
+
     }
 }

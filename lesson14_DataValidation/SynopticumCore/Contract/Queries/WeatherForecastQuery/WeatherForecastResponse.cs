@@ -1,6 +1,6 @@
 ﻿namespace SynopticumCore.Contract.Queries.WeatherForecastQuery
 {
-    public class WeatherForecastDTO
+    public class WeatherForecastResponse
     {
         public required DateOnly? Date { get; set; }
 
