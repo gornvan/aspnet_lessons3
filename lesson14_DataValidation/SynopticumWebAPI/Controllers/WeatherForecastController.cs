@@ -3,6 +3,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Contract.Interfaces.WeatherForecastService;
 using Microsoft.EntityFrameworkCore;
+using SynopticumCore.Validation.WeatherForecast;
+using SynopticumWebAPI.Models.WeatherForecast;
+using SynopticumModel.Entities;
 
 namespace lesson8_WebApi.Controllers
 {
@@ -13,6 +16,31 @@ namespace lesson8_WebApi.Controllers
         ILogger<WeatherForecastController> _logger
         ) : ControllerBase
     {
+
+        [HttpPost(template: "countries/{CountryName}/cities/{CityName}",
+            Name = "AddWeatherForecast")]
+        public async Task<IActionResult> Post(NewWeatherForecastDTO forecastDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.Where(v => v.Errors.Any()));
+            }
+
+            var newForecast = new NewWeatherForecast {
+                CityName = forecastDto.CityName,
+                CountryName = forecastDto.CountryName,
+                Date = forecastDto.Date,
+                Summary = forecastDto.Summary,
+                TemperatureC = forecastDto.TemperatureC,
+            };
+
+            var validator = new NewWeatherForecastValidator();
+            validator.Validate(newForecast);
+
+            var createdForecast = await _weatherForecastService.AddForecast(newForecast);
+
+            return new JsonResult(createdForecast);
+        }
 
         /// <summary>
         /// Example of a RESTful endpoint allowing to filter, paginate and project the data
