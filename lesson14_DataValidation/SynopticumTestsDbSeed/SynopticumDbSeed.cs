@@ -2,7 +2,6 @@
 using SynopticumDAL.Services;
 using SynopticumModel.Entities;
 using SynopticumModel.Enums;
-using System.Diagnostics.Metrics;
 
 namespace SynopticumTestsDbSeed
 {
@@ -27,19 +26,6 @@ namespace SynopticumTestsDbSeed
                 new Country { Name = "Australia" }
             };
 
-            foreach (var country in countries)
-            {
-                for (var i = 0; i < DataCopies; i++)
-                {
-                    var postfix = i > 0 ? i.ToString() : "";
-                    var name = $"{country.Name}{postfix}";
-                    if (!await countrySet.AnyAsync(c => c.Name == name))
-                    {
-                        await countrySet.AddAsync(new Country { Name = name });
-                    }
-                }
-            }
-
             // Create cities
             var cities = new[]
             {
@@ -50,39 +36,53 @@ namespace SynopticumTestsDbSeed
                 new City { Name = "Tokyo", Country = countries[3] },
                 new City { Name = "Sydney", Country = countries[4] }
             };
-
-            for (var i = 0; i< DataCopies; i++)
-            foreach (var city in cities)
-            {
-                var postfix = i > 0 ? i.ToString() : "";
-                var name = $"{city.Name}{postfix}";
-                if (!await citySet.AnyAsync(c => c.Name == name))
-                {
-                        await citySet.AddAsync(new City { Name = name, Country = city.Country }); 
-                }
-            }
-
-            // Create weather forecasts
+            
             var random = new Random();
-            foreach (var city in cities)
-            {
-                for (int i = 0; i < 30; i++)
-                {
-                    var forecast = new WeatherForecast
-                    {
-                        Date = DateOnly.FromDateTime(DateTime.Today.AddDays(i)),
-                        TemperatureC = random.Next(-10, 40), // Random temperatures between -10°C and 40°C
-                        Summary = (WeatherSummary)random.Next(1, 11), // Random summary from 1 to 10
-                        City = city
-                    };
 
-                    if (! await forecastsSet.AnyAsync(f => f.City.Name == city.Name && f.Date == forecast.Date))
+            for (var i = 0; i < DataCopies; i++)
+            {
+                foreach (var plannedCity in cities)
+                {
+                    var postfix = i > 0 ? i.ToString() : "";
+                    var countryName = $@"{plannedCity.Country.Name}{postfix}";
+                    var cityName = $"{plannedCity.Name}{postfix}";
+                    var countryEntity = await countrySet
+                        .FirstOrDefaultAsync(c => c.Name == countryName);
+                    var cityEntity = await citySet
+                        .FirstOrDefaultAsync(c => c.Name == cityName && c.Country.Name == countryName);
+
+                    if (countryEntity == null)
                     {
-                        await forecastsSet.AddAsync(forecast);
+                        countryEntity = new Country { Name = countryName };
+                        countrySet.Add(countryEntity);
                     }
+
+                    if (cityEntity == null)
+                    {
+                        cityEntity = new City { Name = cityName, Country = countryEntity };
+                        citySet.Add(cityEntity);
+                    }
+
+                    for (int f = 0; f < 30; f++)
+                    {
+                        var forecast = new WeatherForecast
+                        {
+                            Date = DateOnly.FromDateTime(DateTime.Today.AddDays(f)),
+                            TemperatureC = random.Next(-10, 40), // Random temperatures between -10°C and 40°C
+                            Summary = (WeatherSummary)random.Next(1, 11), // Random summary from 1 to 10
+                            City = cityEntity
+                        };
+
+                        if (!await forecastsSet
+                            .AnyAsync(fc => fc.City.Name == plannedCity.Name && fc.City.Country.Name == countryName && fc.Date == forecast.Date))
+                        {
+                            forecastsSet.Add(forecast);
+                        }
+                    }
+
+                    await _dbcontext.SaveChangesAsync();
                 }
             }
-
             await _dbcontext.SaveChangesAsync();
         }
     }
