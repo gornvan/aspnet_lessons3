@@ -1,4 +1,5 @@
-﻿using SynopticumDAL.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using SynopticumDAL.Services;
 using SynopticumTestsDbSeed;
 
 namespace SynopticumWebAPI
@@ -16,7 +17,7 @@ namespace SynopticumWebAPI
 
             var dbcontext = initializationScope.ServiceProvider.GetRequiredService<SynopticumDbContext>();
 
-            dbcontext.Database.EnsureCreated();
+            dbcontext.Database.Migrate();
 
             var seeder = new SynopticumDbSeed(dbcontext);
             await seeder.Seed();

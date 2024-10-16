@@ -2,13 +2,14 @@
 using SynopticumDAL.Services;
 using SynopticumModel.Entities;
 using SynopticumModel.Enums;
+using System.Diagnostics.Metrics;
 
 namespace SynopticumTestsDbSeed
 {
     public class SynopticumDbSeed(
         SynopticumDbContext _dbcontext)
     {
-        private const int DataCopies = 6000;
+        private const int DataCopies = 1;
 
         public async Task Seed()
         {
@@ -30,7 +31,8 @@ namespace SynopticumTestsDbSeed
             {
                 for (var i = 0; i < DataCopies; i++)
                 {
-                    var name = $"{country.Name}{i}";
+                    var postfix = i > 0 ? i.ToString() : "";
+                    var name = $"{country.Name}{postfix}";
                     if (!await countrySet.AnyAsync(c => c.Name == name))
                     {
                         await countrySet.AddAsync(new Country { Name = name });
@@ -52,7 +54,8 @@ namespace SynopticumTestsDbSeed
             for (var i = 0; i< DataCopies; i++)
             foreach (var city in cities)
             {
-                var name = $"{city.Name}{i}";
+                var postfix = i > 0 ? i.ToString() : "";
+                var name = $"{city.Name}{postfix}";
                 if (!await citySet.AnyAsync(c => c.Name == name))
                 {
                         await citySet.AddAsync(new City { Name = name, Country = city.Country }); 
