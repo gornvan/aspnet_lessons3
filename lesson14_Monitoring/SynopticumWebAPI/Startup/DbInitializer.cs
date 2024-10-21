@@ -2,7 +2,7 @@
 using SynopticumDAL.Services;
 using SynopticumTestsDbSeed;
 
-namespace SynopticumWebAPI
+namespace SynopticumWebAPI.Startup
 {
     public static class DbInitializer
     {
