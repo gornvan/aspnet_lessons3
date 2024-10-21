@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using SynopticumCore.Contract.Queries.WeatherForecastQuery;
-using SynopticumCore.Contract.Interfaces.WeatherForecastService;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using SynopticumCore.Contract.Interfaces.WeatherForecastService;
+using SynopticumCore.Contract.Queries.WeatherForecastQuery;
 using SynopticumCore.Validation.WeatherForecast;
 using SynopticumWebAPI.Models.WeatherForecast;
-using SynopticumModel.Entities;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Text.Json;
+using ILogger = Serilog.ILogger;
 
 namespace lesson8_WebApi.Controllers
 {
@@ -14,7 +14,7 @@ namespace lesson8_WebApi.Controllers
     [Route("[controller]")]
     public class WeatherForecastController(
         IWeatherForecastService _weatherForecastService,
-        ILogger<WeatherForecastController> _logger
+        ILogger _logger
         ) : ControllerBase
     {
 
@@ -22,12 +22,8 @@ namespace lesson8_WebApi.Controllers
             Name = "AddWeatherForecast")]
         public async Task<IActionResult> Post(NewWeatherForecastDTO forecastDto)
         {
-            if (!ModelState.IsValid)
+            var newForecast = new NewWeatherForecast
             {
-                return BadRequest(ModelState.Values.Where(v => v.Errors.Any()));
-            }
-
-            var newForecast = new NewWeatherForecast {
                 CityName = forecastDto.CityName,
                 CountryName = forecastDto.CountryName,
                 Date = forecastDto.Date,
@@ -36,7 +32,15 @@ namespace lesson8_WebApi.Controllers
             };
 
             var validator = new NewWeatherForecastValidator();
-            validator.Validate(newForecast);
+            var validationResult = validator.Validate(newForecast);
+            if (!validationResult.IsValid)
+            {
+                var errorsText = JsonSerializer.Serialize(validationResult.Errors);
+                var sourceIp = Request.HttpContext.Connection.RemoteIpAddress;
+                _logger.Warning(
+                    $"A badly formed Forecast has been submitted by {sourceIp}; errors: {errorsText}; forecastDto: {JsonSerializer.Serialize(forecastDto)}");
+                return BadRequest(errorsText);
+            }
 
             var createdForecast = await _weatherForecastService.AddForecast(newForecast);
 
@@ -54,7 +58,7 @@ namespace lesson8_WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(
-            template:"countries/{countryName}/cities/{cityName}",
+            template: "countries/{countryName}/cities/{cityName}",
             Name = "GetWeatherForecast")]
         public async Task<IActionResult> Get(
             string countryName,
@@ -102,7 +106,7 @@ namespace lesson8_WebApi.Controllers
 
         }
 
-        private static T? MutateObjectToGetProjection<T>(T? originalObject, string[] fieldNames) where T: class
+        private static T? MutateObjectToGetProjection<T>(T? originalObject, string[] fieldNames) where T : class
         {
             if (originalObject == default(T))
             {
