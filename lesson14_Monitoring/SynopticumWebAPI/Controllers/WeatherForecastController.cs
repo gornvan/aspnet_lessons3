@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SynopticumCore.Validation.WeatherForecast;
 using SynopticumWebAPI.Models.WeatherForecast;
 using SynopticumModel.Entities;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace lesson8_WebApi.Controllers
 {
@@ -40,6 +41,12 @@ namespace lesson8_WebApi.Controllers
             var createdForecast = await _weatherForecastService.AddForecast(newForecast);
 
             return new JsonResult(createdForecast);
+        }
+
+        [HttpGet("Error")]
+        public IActionResult GetError()
+        {
+            return new StatusCodeResult(statusCode: StatusCodes.Status500InternalServerError);
         }
 
         /// <summary>
