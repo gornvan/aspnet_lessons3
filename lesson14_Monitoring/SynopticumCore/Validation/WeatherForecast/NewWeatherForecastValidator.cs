@@ -17,9 +17,9 @@ namespace SynopticumCore.Validation.WeatherForecast
             var expectedMinimumTemperature = (int)context.InstanceToValidate.Summary * 10 + bottomTemperature;
             var expectedMaximumTemperature = ((int)context.InstanceToValidate.Summary + 1) * 10 + bottomTemperature;
 
-            if (!
-                (context.InstanceToValidate.TemperatureC >= expectedMinimumTemperature
-                && context.InstanceToValidate.TemperatureC < expectedMaximumTemperature)
+            if (
+                context.InstanceToValidate.TemperatureC < expectedMinimumTemperature
+                || context.InstanceToValidate.TemperatureC > expectedMaximumTemperature
                )
             {
                 context.AddFailure("Summary is not temperaturically reasonable!");
