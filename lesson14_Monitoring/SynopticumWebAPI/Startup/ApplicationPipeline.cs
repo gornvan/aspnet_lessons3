@@ -21,7 +21,6 @@ public static class ApplicationPipeline
 
         app.UseAuthorization();
 
-        app.MapControllers();
 
         app.UseResponseCompression();
     }

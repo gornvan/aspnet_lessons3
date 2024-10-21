@@ -18,6 +18,8 @@ namespace lesson8_WebApi
 
             app.InitializePipeline();
 
+            app.MapControllers();
+
             app.Run();
         }
     }
