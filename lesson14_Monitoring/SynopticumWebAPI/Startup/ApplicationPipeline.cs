@@ -1,4 +1,5 @@
 ﻿using lesson8_WebApi.Middlewares;
+using SynopticumWebAPI.Middlewares;
 using System.Reflection;
 
 namespace SynopticumWebAPI.Startup;
@@ -7,6 +8,8 @@ public static class ApplicationPipeline
 {
     public static void InitializePipeline(this WebApplication app)
     {
+        app.UseResponseCompression();
+
         ApplyApiVersionRoutePrefix(app);
 
         // Configure the HTTP request pipeline.
@@ -21,8 +24,7 @@ public static class ApplicationPipeline
 
         app.UseAuthorization();
 
-
-        app.UseResponseCompression();
+        app.UseMiddleware<BadRequestLoggingMiddleware>();
     }
 
     private static void ApplyApiVersionRoutePrefix(WebApplication app)
