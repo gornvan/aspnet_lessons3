@@ -1,5 +1,3 @@
-using SynopticumCore;
-using SynopticumDAL;
 using SynopticumWebAPI.Startup;
 
 namespace lesson8_WebApi
@@ -16,8 +14,10 @@ namespace lesson8_WebApi
 
             await DbInitializer.InitializeDb(app.Services);
 
-            app.InitializePipeline();
+            app.RegisterRoutes();
 
+            app.InitializePipeline();
+            app.ApplyApiVersionRoutePrefix();
             app.MapControllers();
 
             app.Run();
