@@ -1,0 +1,6 @@
+@lesson17_ModelBinding_HostAddress = http://localhost:5135
+
+GET {{lesson17_ModelBinding_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
