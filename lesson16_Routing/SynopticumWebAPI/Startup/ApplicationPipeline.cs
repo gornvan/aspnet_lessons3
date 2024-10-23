@@ -10,7 +10,6 @@ public static class ApplicationPipeline
     {
         app.UseResponseCompression();
 
-        ApplyApiVersionRoutePrefix(app);
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -25,13 +24,5 @@ public static class ApplicationPipeline
         app.UseAuthorization();
 
         app.UseMiddleware<BadRequestLoggingMiddleware>();
-    }
-
-    private static void ApplyApiVersionRoutePrefix(WebApplication app)
-    {
-        var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        var pathPrefix = $"/api/{appVersion}";
-        app.UseMiddleware<GlobalRoutePrefixMiddleware>(pathPrefix);
-        app.UsePathBase(pathPrefix);
     }
 }
