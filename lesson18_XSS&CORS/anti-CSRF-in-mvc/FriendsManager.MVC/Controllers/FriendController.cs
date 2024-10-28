@@ -23,8 +23,9 @@ namespace FriendsManager.MVC.Controllers
         {
             return View();
         }
-
+        
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Friend friend)
         {
             if (!ModelState.IsValid)
@@ -52,7 +53,8 @@ namespace FriendsManager.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Friend friend)
+		[ValidateAntiForgeryToken]
+		public IActionResult Edit(Friend friend)
         {
             if (!ModelState.IsValid)
             {
@@ -87,7 +89,8 @@ namespace FriendsManager.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConfirmDelete(int id)
+		[ValidateAntiForgeryToken]
+		public IActionResult ConfirmDelete(int id)
         {
             var existingFriendIndex = _friends
                 .FindIndex(f => f.FriendID == id);
@@ -117,7 +120,8 @@ namespace FriendsManager.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Relocate(RelocateFriendModel relocation)
+		[ValidateAntiForgeryToken]
+		public IActionResult Relocate(RelocateFriendModel relocation)
         {
             if (!ModelState.IsValid)
             {
