@@ -6,7 +6,7 @@
 
 <h2>Relocate a Friend</h2>
 
-<form method="post" asp-controller="Friend" asp-action="Relocate">
+<form id="relocateForm" method="post" asp-controller="Friend" asp-action="Relocate">
     <div class="mb-3">
         <label for="FriendId" class="form-label">Friend ID</label>
         <input type="number" class="form-control" id="FriendId" name="FriendId" value="@Model.FriendId" required />
@@ -19,3 +19,8 @@
 
     <button type="submit" class="btn btn-primary">Relocate</button>
 </form>
+
+
+<script>
+    wrapFormInFetch("relocateForm");
+</script>

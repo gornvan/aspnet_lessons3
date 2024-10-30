@@ -5,7 +5,9 @@
 
 <h1>CreateFriend</h1>
 
-<form method="post" asp-controller="Friend" asp-action="Create">
+<div id="resultMessage"></div> <!-- Container for displaying results -->
+
+<form id="friendForm" method="post" asp-controller="Friend" asp-action="Create">
 	<label asp-for="FriendName"></label>
 	<input asp-for="FriendName" />
 	<span asp-validation-for="FriendName"></span>
@@ -20,3 +22,7 @@
 
 	<input type="submit" value="Create" />
 </form>
+
+<script>
+	wrapFormInFetch("friendForm");
+</script>
