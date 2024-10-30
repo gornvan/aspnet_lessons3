@@ -25,7 +25,6 @@ namespace FriendsManager.MVC.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Friend friend)
         {
             if (!ModelState.IsValid)
