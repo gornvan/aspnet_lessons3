@@ -1,3 +1,6 @@
+using FriendsManager.MVC.Security;
+using FriendsManager.MVC.Security.CsrfCrutchHeaderMiddleware;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -6,6 +9,8 @@ internal class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        builder.AddMvcCrutchCorsPolicy(SecurityConstants.CosrPolicyNameForMvcCrutchPolicy);
 
         var app = builder.Build();
 
@@ -29,6 +34,10 @@ internal class Program
         app.MapControllerRoute(
             name: "default",
             pattern: @"{controller=Home}/{action=Index}/{id?}");
+
+        app.UseMiddleware<SecurityHeaderMiddleware>();
+
+        app.UseCors(SecurityConstants.CosrPolicyNameForMvcCrutchPolicy);
 
         app.Run();
     }
