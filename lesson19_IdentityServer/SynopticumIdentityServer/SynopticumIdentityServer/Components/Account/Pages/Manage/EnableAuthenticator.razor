@@ -39,8 +39,8 @@ else
             <li>
                 <p>Scan the QR Code or enter this key <kbd>@sharedKey</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
                 <div class="alert alert-info">Learn how to <a href="https://go.microsoft.com/fwlink/?Linkid=852423">enable QR code generation</a>.</div>
-                <div></div>
-                <div data-url="@authenticatorUri"></div>
+                <div id="qrCode"></div>
+                <div id="qrCodeData" data-url="@authenticatorUri"></div>
             </li>
             <li>
                 <p>
@@ -65,6 +65,19 @@ else
         </ol>
     </div>
 }
+
+<script>
+const uri = document.getElementById("qrCodeData").getAttribute('data-url');
+window.code = new QRCode(
+    document.getElementById("qrCode"),
+    {
+        text: uri,
+        width: 350,
+        height: 350
+    }
+);
+</script>
+
 
 @code {
     private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
