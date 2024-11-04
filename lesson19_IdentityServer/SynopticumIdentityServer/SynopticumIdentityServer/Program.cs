@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SynopticumIdentityServer.Client.Pages;
 using SynopticumIdentityServer.Components;
 using SynopticumIdentityServer.Components.Account;
 using SynopticumIdentityServer.Data;
@@ -36,6 +35,7 @@ namespace SynopticumIdentityServer
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
             builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
@@ -64,8 +64,7 @@ namespace SynopticumIdentityServer
             app.UseAntiforgery();
 
             app.MapRazorComponents<App>()
-                .AddInteractiveWebAssemblyRenderMode()
-                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+                .AddInteractiveWebAssemblyRenderMode();
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using SynopticumIdentityServer.Client;
+using SynopticumIdeneityServerContract;
 using System.Diagnostics;
 
 namespace SynopticumIdentityServer.Components.Account
