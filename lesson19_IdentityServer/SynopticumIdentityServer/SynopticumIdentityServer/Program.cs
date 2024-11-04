@@ -31,9 +31,9 @@ namespace SynopticumIdentityServer
                 })
                 .AddIdentityCookies();
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+
+            AddDatabase(builder);
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -71,6 +71,16 @@ namespace SynopticumIdentityServer
             app.MapAdditionalIdentityEndpoints();
 
             app.Run();
+        }
+
+        public static void AddDatabase(WebApplicationBuilder builder)
+        {
+            var connectionString = builder.Configuration
+                .GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var mySqlVersion = builder.Configuration
+                .GetSection("MySql").GetValue<string>("Version");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.Parse(mySqlVersion)));
         }
     }
 }
