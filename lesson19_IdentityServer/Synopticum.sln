@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SynopticumDAL", "Synopticum
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SynopticumModel", "SynopticumModel\SynopticumModel.csproj", "{D88EA0AB-F6C4-4B42-9EDF-BB3879156D9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynopticumTestsDbSeed", "SynopticumTestsDbSeed\SynopticumTestsDbSeed.csproj", "{D8FC40DA-2814-492F-99E9-605AE14DAE9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SynopticumTestsDbSeed", "SynopticumTestsDbSeed\SynopticumTestsDbSeed.csproj", "{D8FC40DA-2814-492F-99E9-605AE14DAE9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynopticumIdentityServer", "SynopticumIdentityServer\SynopticumIdentityServer\SynopticumIdentityServer.csproj", "{7F6D5C59-E99F-4363-A9D5-CF636B07627F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynopticumIdentityServer.Client", "SynopticumIdentityServer\SynopticumIdentityServer.Client\SynopticumIdentityServer.Client.csproj", "{9D5E4029-A066-4F08-8BEB-E37C827A86F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F6D5C59-E99F-4363-A9D5-CF636B07627F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F6D5C59-E99F-4363-A9D5-CF636B07627F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F6D5C59-E99F-4363-A9D5-CF636B07627F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F6D5C59-E99F-4363-A9D5-CF636B07627F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D5E4029-A066-4F08-8BEB-E37C827A86F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D5E4029-A066-4F08-8BEB-E37C827A86F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D5E4029-A066-4F08-8BEB-E37C827A86F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D5E4029-A066-4F08-8BEB-E37C827A86F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
