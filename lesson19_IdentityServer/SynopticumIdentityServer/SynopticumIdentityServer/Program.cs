@@ -45,6 +45,8 @@ namespace SynopticumIdentityServer
 
             var app = builder.Build();
 
+            await DbInitializer.Initialize(app.Services);
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
