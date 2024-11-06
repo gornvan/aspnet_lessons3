@@ -1,15 +1,23 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SynopticumIdentityServer.Components;
 using SynopticumIdentityServer.Components.Account;
 using SynopticumIdentityServer.Data;
+using SynopticumIdentityServer.Data.DbSeed;
+using SynopticumIdentityServer.Jwt;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SynopticumIdentityServer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,24 +30,41 @@ namespace SynopticumIdentityServer
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, PersistingServerAuthenticationStateProvider>();
 
-            builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-                })
-                .AddIdentityCookies();
+            builder.Services.AddScoped<JwtGenerator>();
 
+            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthorization();
+
+            var tokenSigningSecretKey = builder.Configuration.GetRequiredSection("JWT").GetValue<string>("SecretKey");
+            using var sha256 = SHA256.Create();
+            var hashedKey = sha256.ComputeHash(Encoding.UTF8.GetBytes(tokenSigningSecretKey));
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = "localhost:7000",
+                ValidAudience = "your_audience_url",
+                IssuerSigningKey = new SymmetricSecurityKey(hashedKey)
+            };
+            builder.Services.AddSingleton(tokenValidationParameters);
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "AuthToken"; // Ensure it matches the cookie name
+            });
 
             AddDatabase(builder);
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddSignInManager()
-                .AddDefaultTokenProviders();
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
@@ -61,6 +86,9 @@ namespace SynopticumIdentityServer
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<JwtCookieAuthenticationMiddleware>();
+            app.UseAuthorization();   // Add authorization second
 
             app.UseStaticFiles();
             app.UseAntiforgery();
