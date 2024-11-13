@@ -16,6 +16,8 @@ namespace SynopticumWebApp
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            AddDatabase(builder);
+
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
@@ -47,6 +49,16 @@ namespace SynopticumWebApp
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        public static void AddDatabase(WebApplicationBuilder builder)
+        {
+            var connectionString = builder.Configuration
+                .GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var mySqlVersion = builder.Configuration
+                .GetSection("MySql").GetValue<string>("Version");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.Parse(mySqlVersion)));
         }
     }
 }
