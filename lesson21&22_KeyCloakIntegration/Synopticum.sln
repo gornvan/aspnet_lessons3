@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SynopticumModel", "Synoptic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SynopticumTestsDbSeed", "SynopticumTestsDbSeed\SynopticumTestsDbSeed.csproj", "{D8FC40DA-2814-492F-99E9-605AE14DAE9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynopticumWebApp", "SynopticumWebApp\SynopticumWebApp.csproj", "{2BC59584-F39B-4C5C-9320-796CCD2AE975}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynopticumWebApp", "SynopticumWebApp\SynopticumWebApp.csproj", "{BD3CE395-E15A-4F53-8AAE-A0127053DAF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8FC40DA-2814-492F-99E9-605AE14DAE9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BC59584-F39B-4C5C-9320-796CCD2AE975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BC59584-F39B-4C5C-9320-796CCD2AE975}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BC59584-F39B-4C5C-9320-796CCD2AE975}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BC59584-F39B-4C5C-9320-796CCD2AE975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD3CE395-E15A-4F53-8AAE-A0127053DAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD3CE395-E15A-4F53-8AAE-A0127053DAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD3CE395-E15A-4F53-8AAE-A0127053DAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD3CE395-E15A-4F53-8AAE-A0127053DAF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

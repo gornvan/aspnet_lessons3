@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-SynopticumWebApp-654d7101-0c81-4a79-b727-fc252339cbe4</UserSecretsId>
+    <UserSecretsId>aspnet-SynopticumWebApp-32574d19-24b1-4237-b4c8-db125dc1965b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
