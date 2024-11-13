@@ -1,5 +1,9 @@
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SynopticumWebApp.Data;
 
 namespace SynopticumWebApp
@@ -10,16 +14,39 @@ namespace SynopticumWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
             AddDatabase(builder);
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            builder.Services.AddKeycloakAuthorization(builder.Configuration);
+            builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                .AddKeycloakWebApp(
+                    builder.Configuration.GetSection(KeycloakAuthenticationOptions.Section),
+                    configureOpenIdConnectOptions: options =>
+                    {
+                        // we need this for front-channel sign-out
+                        options.SaveTokens = true;
+                        options.ResponseType = OpenIdConnectResponseType.Code;
+                        options.Events = new OpenIdConnectEvents
+                        {
+                            OnSignedOutCallbackRedirect = context =>
+                            {
+                                context.Response.Redirect("/Home/Public");
+                                context.HandleResponse();
+
+                                return Task.CompletedTask;
+                            },
+                            // we can react to successful authentication here
+                            //OnAuthorizationCodeReceived = context =>
+                            //{
+                            //    return Task.CompletedTask;
+                            //}
+                        };
+                    }
+                );
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -41,6 +68,7 @@ namespace SynopticumWebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
