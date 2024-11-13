@@ -1,0 +1,9 @@
+{
+  "ConnectionStrings": {
+    "Default": "server=localhost;user=Synopticum;password=123123;database=synopticum_tests"
+  },
+
+  "MySql": {
+    "Version": "8.0.39-mysql"
+  }
+}
