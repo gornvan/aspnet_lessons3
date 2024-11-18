@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using SynopticumWebApp.Infrastructure;
 using SynopticumWebApp.Models;
 using System.Diagnostics;
 
-namespace SynopticumWebApp.Controllers
+namespace SynopticumWebApp.Areas.Home.Controllers
 {
-    public class HomeController : Controller
+    [Area("Home")]
+    public class HomeController : SynopticumController
     {
         private readonly ILogger<HomeController> _logger;
 
