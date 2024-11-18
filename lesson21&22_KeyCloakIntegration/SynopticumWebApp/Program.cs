@@ -16,8 +16,9 @@ namespace SynopticumWebApp
 
             AddDatabase(builder);
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<SynopticumUser>(
+                options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
             builder.Services.AddKeycloakAuthorization(builder.Configuration);
