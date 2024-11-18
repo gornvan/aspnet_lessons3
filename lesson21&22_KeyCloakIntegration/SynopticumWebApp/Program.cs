@@ -1,10 +1,12 @@
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SynopticumWebApp.Data;
+using SynopticumWebApp.Data.Entities;
 
 namespace SynopticumWebApp
 {
@@ -20,9 +22,7 @@ namespace SynopticumWebApp
                 options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-            builder.Services.AddKeycloakAuthorization(builder.Configuration);
-            builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication()
                 .AddKeycloakWebApp(
                     builder.Configuration.GetSection(KeycloakAuthenticationOptions.Section),
                     configureOpenIdConnectOptions: options =>
@@ -45,8 +45,25 @@ namespace SynopticumWebApp
                             //    return Task.CompletedTask;
                             //}
                         };
-                    }
+                    },
+                    openIdConnectScheme: "KeyCloak"
                 );
+            builder.Services.AddAuthentication()
+                .AddGoogle( "Google",
+                googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                });
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+
+            builder.Services.AddKeycloakAuthorization(builder.Configuration);
 
             builder.Services.AddControllersWithViews();
 
