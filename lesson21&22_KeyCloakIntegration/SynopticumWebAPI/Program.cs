@@ -1,3 +1,4 @@
+using SynopticumDAL.DBSeed;
 using SynopticumWebAPI.Startup;
 
 namespace lesson8_WebApi

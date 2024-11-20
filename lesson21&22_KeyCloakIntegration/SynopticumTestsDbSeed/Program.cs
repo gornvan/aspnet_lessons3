@@ -11,7 +11,7 @@ namespace SynopticumTestsDbSeed
 
             dbContext.Database.EnsureCreated();
 
-            var seeder = new SynopticumTestsDbSeed(dbContext);
+            var seeder = new SynopticumDAL.DBSeed.SynopticumTestsDbSeed(dbContext);
             await seeder.Seed();
 
             Console.WriteLine($@"The DB {dbContext.Database.GetDbConnection().Database} has been seeded successfully!");
