@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SynopticumDAL.Contract;
 using SynopticumDAL.Services;
+using SynopticumWebApp.Data.Entities;
 
 namespace SynopticumDAL
 {
@@ -19,9 +21,17 @@ namespace SynopticumDAL
                     dbOptionsBuilder,
                     connectionString,
                     serverVersion,
-                    isDevelopment
-                    )
+                    isDevelopment)
             );
+
+            services.AddIdentityCore<SynopticumUser>(
+                options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                }
+            ).AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<SynopticumDbContext>()
+            .AddSignInManager();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
