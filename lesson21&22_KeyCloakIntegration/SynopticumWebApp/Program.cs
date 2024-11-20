@@ -18,9 +18,53 @@ namespace SynopticumWebApp
 
             AddDatabase(builder);
 
+            ConfigureAuth(builder);
+
+            builder.Services.AddControllersWithViews();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}", new { area = "Home" });
+
+            app.MapRazorPages();
+
+            app.Run();
+        }
+
+        private static void ConfigureAuth(WebApplicationBuilder builder)
+        {
             builder.Services.AddDefaultIdentity<SynopticumUser>(
-                options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+                options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                }
+            ).AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddAuthentication()
                 .AddKeycloakWebApp(
@@ -49,7 +93,7 @@ namespace SynopticumWebApp
                     openIdConnectScheme: "KeyCloak"
                 );
             builder.Services.AddAuthentication()
-                .AddGoogle( "Google",
+                .AddGoogle("Google",
                 googleOptions =>
                 {
                     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
@@ -65,36 +109,12 @@ namespace SynopticumWebApp
 
             builder.Services.AddKeycloakAuthorization(builder.Configuration);
 
-            builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            builder.Services.ConfigureApplicationCookie(options =>
             {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
-
-            app.Run();
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
         }
 
         public static void AddDatabase(WebApplicationBuilder builder)
