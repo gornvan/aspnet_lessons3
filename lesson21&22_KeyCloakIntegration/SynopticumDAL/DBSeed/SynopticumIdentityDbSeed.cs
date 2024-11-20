@@ -19,7 +19,7 @@ namespace SynopticumDAL.DBSeed
         public async Task Seed()
         {
             const string adminRoleName = "Administrator";
-            const string adminUserName = "admin@synopticum.com";
+            const string adminUserName = "admin@example.com";
             const string adminPassword = "Admin@123"; // Make sure this meets your password policy
 
             // Ensure Admin role exists
