@@ -154,6 +154,7 @@ namespace SynopticumWebApp.Areas.Identity.Pages.Account
 
         private async Task SignTheUserIn(SynopticumUser user)
         {
+            _signInManager.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             await _signInManager.SignInAsync(
                 user,
                 isPersistent: false,
