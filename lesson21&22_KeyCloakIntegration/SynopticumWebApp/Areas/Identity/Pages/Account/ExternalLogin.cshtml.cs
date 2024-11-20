@@ -128,6 +128,9 @@ namespace SynopticumWebApp.Areas.Identity.Pages.Account
         {
             var provider = GetAuthProvider(principal.Identity);
             var email = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            // in case of tight integration with a certain Identity Provider,
+            // we would pull Roles from the Principal Claims and store them in the User to put into DB
+            // also we would need to make sure the Claims are in sync
 
             // if exists, return it
             var existingUser = await _userManager.FindByEmailAsync(email);
