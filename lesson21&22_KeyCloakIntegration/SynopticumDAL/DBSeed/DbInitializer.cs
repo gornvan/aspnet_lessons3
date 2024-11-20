@@ -19,7 +19,7 @@ namespace SynopticumDAL.DBSeed
 
             await InitializeTestingData(initializationScope);
 
-            //await InitializeIdentity(initializationScope);
+            await InitializeIdentity(initializationScope);
         }
 
         private static async Task InitializeIdentity(IServiceScope initializationScope)
