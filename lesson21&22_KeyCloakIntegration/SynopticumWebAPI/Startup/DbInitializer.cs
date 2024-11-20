@@ -19,7 +19,7 @@ namespace SynopticumWebAPI.Startup
 
             dbcontext.Database.Migrate();
 
-            var seeder = new SynopticumDbSeed(dbcontext);
+            var seeder = new SynopticumTestsDbSeed.SynopticumTestsDbSeed(dbcontext);
             await seeder.Seed();
         }
     }

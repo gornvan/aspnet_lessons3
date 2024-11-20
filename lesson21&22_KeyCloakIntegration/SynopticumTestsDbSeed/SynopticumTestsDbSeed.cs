@@ -6,7 +6,7 @@ using System.Diagnostics.Metrics;
 
 namespace SynopticumTestsDbSeed
 {
-    public class SynopticumDbSeed(
+    public class SynopticumTestsDbSeed(
         SynopticumDbContext _dbcontext)
     {
         private const int DataCopies = 1;
