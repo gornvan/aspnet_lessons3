@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -20,6 +21,7 @@ namespace lesson8_WebApi.Controllers
 
         [HttpPost(template: "countries/{CountryName}/cities/{CityName}",
             Name = "AddWeatherForecast")]
+        [Authorize(Roles = "Synopticist")]
         public async Task<IActionResult> Post(NewWeatherForecastDTO forecastDto)
         {
             var newForecast = new NewWeatherForecast
