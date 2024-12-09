@@ -60,9 +60,11 @@ namespace SynopticumWebApp
 
         private static void AddKeyCloakAuth(WebApplicationBuilder builder)
         {
+            var keycloakSettingsSection = builder.Configuration.GetSection(KeycloakAuthenticationOptions.Section);
+
             builder.Services.AddAuthentication()
                 .AddKeycloakWebApp(
-                    builder.Configuration.GetSection(KeycloakAuthenticationOptions.Section),
+                    keycloakSettingsSection,
                     configureOpenIdConnectOptions: options =>
                     {
                         // we need this for front-channel sign-out
