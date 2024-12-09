@@ -16,6 +16,7 @@ namespace SynopticumWebAPI.Startup
         {
             if (builder.Environment.IsDevelopment())
             {
+                AddSwagger(builder);
                 // Add services to the container.
                 builder.Services.AddHttpLogging(o => { });
             }
@@ -39,6 +40,38 @@ namespace SynopticumWebAPI.Startup
             });
 
             SynopticumCoreModule.RegisterModule(builder.Services);
+        }
+
+        private static void AddSwagger(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                // Add support for JWT Bearer Authorization in Swagger UI
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+            });
         }
 
         private static void AddAuth(WebApplicationBuilder builder)
