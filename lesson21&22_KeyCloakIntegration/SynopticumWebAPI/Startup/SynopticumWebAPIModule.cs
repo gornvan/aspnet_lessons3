@@ -1,5 +1,9 @@
-﻿using Serilog;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Serilog;
 using SynopticumCore;
+using SynopticumCore.Contract;
 using SynopticumDAL;
 using SynopticumWebAPI.ConfigurationSections;
 using ILogger = Serilog.ILogger;
@@ -17,6 +21,7 @@ namespace SynopticumWebAPI.Startup
             }
 
             AddSerilog(builder);
+            AddAuth(builder);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,6 +39,33 @@ namespace SynopticumWebAPI.Startup
             });
 
             SynopticumCoreModule.RegisterModule(builder.Services);
+        }
+
+        private static void AddAuth(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "http://localhost:8080/";
+                    options.Audience = "synopticum-spa"; // Client ID configured in Keycloak
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "http://localhost:8080/realms/Synopticum",
+                        //ValidateAudience = true,
+                        //ValidAudience = "synopticum-spa",
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
+
+                    // Optional: Debugging and HTTPS enforcement
+                    options.RequireHttpsMetadata = false; // Set to true in production
+                    options.SaveToken = true; // Save token for debugging
+                });
+
+            // Enable authorization
+            builder.Services.AddAuthorization();
         }
 
         internal static void AddSerilog(WebApplicationBuilder builder)
