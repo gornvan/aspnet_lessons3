@@ -111,19 +111,6 @@ namespace SynopticumWebApp.Areas.Identity.Pages.Account
             return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
         }
 
-        private async Task<ClaimsPrincipal> SignInWithKeyCloak()
-        {
-            var schema = "KeyCloak";
-            // Authenticate the user with the OpenID Connect scheme
-            var authResult = await this.HttpContext.AuthenticateAsync(schema);
-
-            if (authResult.Succeeded)
-            {
-                return authResult.Principal;
-            }
-            return null;
-        }
-
         private async Task<SynopticumUser> CreateUserIfNotKnown(ClaimsPrincipal principal)
         {
             var provider = GetAuthProvider(principal.Identity);
