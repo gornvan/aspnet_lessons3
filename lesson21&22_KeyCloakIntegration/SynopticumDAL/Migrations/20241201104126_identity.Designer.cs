@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SynopticumDAL.Services;
 
@@ -11,9 +12,11 @@ using SynopticumDAL.Services;
 namespace SynopticumDAL.Migrations
 {
     [DbContext(typeof(SynopticumDbContext))]
-    partial class SynopticumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241201104126_identity")]
+    partial class identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
