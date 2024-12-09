@@ -10,7 +10,6 @@ public static class ApplicationPipeline
     {
         app.UseResponseCompression();
 
-
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -20,6 +19,8 @@ public static class ApplicationPipeline
         }
 
         app.UseHttpsRedirection();
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 
