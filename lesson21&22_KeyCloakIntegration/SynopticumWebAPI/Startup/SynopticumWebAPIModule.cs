@@ -76,25 +76,60 @@ namespace SynopticumWebAPI.Startup
 
         private static void AddAuth(WebApplicationBuilder builder)
         {
+            var tokenValidationParams = builder.Configuration
+                .GetSection(nameof(TokenValidationParameters))
+                .Get<TokenValidationParametersConfig>();
+            if (tokenValidationParams == null)
+            {
+                throw new SystemException("Could not parse TokenValidationParams in settings!");
+            }
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "http://localhost:8080/";
-                    options.Audience = "synopticum-spa"; // Client ID configured in Keycloak
+                    options.Authority = tokenValidationParams.Authority;
 
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = "http://localhost:8080/realms/Synopticum",
-                        //ValidateAudience = true,
-                        //ValidAudience = "synopticum-spa",
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
+                    options.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuer = tokenValidationParams.ValidateIssuer,
+                        ValidIssuer = tokenValidationParams.ValidIssuer,
+                        ValidateAudience = tokenValidationParams.ValidateAudience,
+                        ValidAudience = tokenValidationParams.ValidAudience,
+                        ValidateLifetime = tokenValidationParams.ValidateLifetime,
+                        ValidateIssuerSigningKey = tokenValidationParams.ValidateIssuerSigningKey,
                     };
 
-                    // Optional: Debugging and HTTPS enforcement
-                    options.RequireHttpsMetadata = false; // Set to true in production
-                    options.SaveToken = true; // Save token for debugging
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = false;
+
+                    if (builder.Environment.IsDevelopment())
+                    {
+                        // Optional: Debugging and HTTPS enforcement
+                        options.RequireHttpsMetadata = false; // Set to true in production
+                        options.SaveToken = true; // Save token for debugging
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnAuthenticationFailed = context =>
+                            {
+                                Console.WriteLine("Authentication failed: " + context.Exception.Message);
+                                return Task.CompletedTask;
+                            },
+                            OnChallenge = context =>
+                            {
+                                Console.WriteLine("OnChallenge: " + context.ErrorDescription);
+                                if (context.AuthenticateFailure != null)
+                                {
+                                    Console.WriteLine("Authentication failure: " + context.AuthenticateFailure.Message);
+                                }
+                                return Task.CompletedTask;
+                            },
+                            OnTokenValidated = context =>
+                            {
+                                Console.WriteLine("Token validated successfully");
+                                return Task.CompletedTask;
+                            }
+                        };
+                    }
                 });
 
             // Enable authorization
@@ -116,6 +151,8 @@ namespace SynopticumWebAPI.Startup
             if (builder.Environment.IsDevelopment())
             {
                 loggerConfig = loggerConfig.MinimumLevel.Debug();
+                builder.Logging.SetMinimumLevel(LogLevel.Debug);
+                builder.Logging.AddConsole();
             }
             else
             {
