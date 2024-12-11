@@ -21,7 +21,7 @@ namespace lesson8_WebApi.Controllers
 
         [HttpPost(template: "countries/{CountryName}/cities/{CityName}",
             Name = "AddWeatherForecast")]
-        [Authorize(Roles = "Synopticist")]
+        [Authorize]
         public async Task<IActionResult> Post(NewWeatherForecastDTO forecastDto)
         {
             var newForecast = new NewWeatherForecast
