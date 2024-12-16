@@ -16,6 +16,11 @@ public static class ApplicationPipeline
             app.UseHttpLogging();
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors(CorsConfigurer.RelaxedCorsPolicyName);
+        }
+        else
+        {
+            app.UseCors(CorsConfigurer.StrictCorsPolicyName);
         }
 
         app.UseHttpsRedirection();

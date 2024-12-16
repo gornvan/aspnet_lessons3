@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using SynopticumCore;
-using SynopticumCore.Contract;
 using SynopticumDAL;
 using SynopticumWebAPI.ConfigurationSections;
 using ILogger = Serilog.ILogger;
@@ -21,6 +20,7 @@ namespace SynopticumWebAPI.Startup
                 builder.Services.AddHttpLogging(o => { });
             }
 
+            builder.ConfigureCors();
             AddSerilog(builder);
             AddAuth(builder);
 
