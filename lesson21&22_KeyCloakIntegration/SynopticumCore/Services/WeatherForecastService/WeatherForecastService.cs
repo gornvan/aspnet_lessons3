@@ -13,7 +13,7 @@ namespace SynopticumCore.Services.WeatherForecastService
             var cityRepo = _unitOfWork.GetRepository<City>();
 
             var targetCity = await cityRepo
-                    .AsReadOnlyQueryable()
+                    .AsQueryable()
                     .FirstOrDefaultAsync(
                         c => c.Name == cityName
                         && c.Country.Name == countryName);
