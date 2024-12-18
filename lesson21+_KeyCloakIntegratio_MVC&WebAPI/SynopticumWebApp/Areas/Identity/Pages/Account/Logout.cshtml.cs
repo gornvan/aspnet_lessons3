@@ -24,6 +24,9 @@ namespace SynopticumWebApp.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            // todo support keycloak logout
+            // maybe just redirect to http://localhost:8080/realms/Synopticum/protocol/openid-connect/logout
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             _logger.LogInformation("User logged out.");
