@@ -111,7 +111,9 @@ namespace SynopticumCore.Services.WeatherForecastService
                     .Where(forecast => query.CityName == null || forecast.City.Country.Id == targetCountry.Id);
             }
 
-            return repoQueryWithFilter
+            var orderedRepoQuery = repoQueryWithFilter.OrderBy(f => f.Date);
+
+            return orderedRepoQuery
                 .Select(forecast =>
                 new WeatherForecastResponse
                 {
