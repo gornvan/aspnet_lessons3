@@ -1,0 +1,16 @@
+# Image for BUILDING
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /src
+
+# copy the csproject into the container LAYER 1
+COPY backend.csproj backend.csproj
+
+# pull the nuget packages
+RUN dotnet restore backend.csproj
+
+# copy the rest of the application sources
+COPY . .
+
+# build the application
+RUN dotnet build backend.csproj -c Release -o /app
