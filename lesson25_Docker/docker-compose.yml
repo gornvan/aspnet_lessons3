@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8081:8081"  # Expose backend's 8081 to the host machine and other containers
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"  # Expose frontend's 8080 to the host machine
+    depends_on:
+      - backend  # Ensure the backend starts before the frontend
+    networks:
+      - app-network
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8081  # Pass the backend URL to the frontend
+
+networks:
+  app-network:
+    driver: bridge
