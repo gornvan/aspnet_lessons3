@@ -1,0 +1,17 @@
+# Use the official MySQL image as the base
+FROM mysql:8.0.39
+
+# Set environment variables for MySQL
+ENV MYSQL_ROOT_PASSWORD=123123 \
+    MYSQL_DATABASE=synopticum \
+    MYSQL_USER=Synopticum \
+    MYSQL_PASSWORD=123123
+
+# Copy a custom MySQL configuration file into the container
+COPY my.cnf /etc/mysql/conf.d/
+
+# Expose the custom MySQL port
+EXPOSE 3333
+
+# Default command to start MySQL
+CMD ["mysqld"]
