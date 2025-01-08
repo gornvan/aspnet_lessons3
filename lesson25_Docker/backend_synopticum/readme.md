@@ -34,3 +34,21 @@ https://learn.microsoft.com/en-us/aspnet/core/security/authentication/social/goo
 dotnet user-secrets set "Authentication:Google:ClientId" "<client-id>"
 dotnet user-secrets set "Authentication:Google:ClientSecret" "<client-secret>"
 ```
+
+# Docker
+## Build
+docker build . -t synopticum_backend
+
+## Run in Dev mode
+``` sh
+docker run \
+-p 8081:8081  \
+-e ASPNETCORE_ENVIRONMENT=Development \
+synopticum_backend
+```
+
+## Run in Prod mode
+docker run \
+-p 8081:8081 \
+synopticum_backend
+
