@@ -16,8 +16,6 @@ services:
       - "8080:8080"  # Expose frontend's 8080 to the host machine
     depends_on:
       - backend  # Ensure the backend starts before the frontend
-    networks:
-      - app-network
     environment:
       - REACT_APP_BACKEND_URL=http://backend:8081  # Pass the backend URL to the frontend
 
