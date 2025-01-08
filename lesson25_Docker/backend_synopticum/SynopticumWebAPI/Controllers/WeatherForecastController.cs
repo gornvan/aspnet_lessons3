@@ -21,7 +21,6 @@ namespace lesson8_WebApi.Controllers
 
         [HttpPost(template: "countries/{CountryName}/cities/{CityName}",
             Name = "AddWeatherForecast")]
-        [Authorize]
         public async Task<IActionResult> Post(
             string CountryName,
             string CityName,
